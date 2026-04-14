@@ -1,33 +1,37 @@
-const scriptURL = 'https://script.google.com/macros/s/ISI_URL_KAMU/exec';
+document.addEventListener("DOMContentLoaded", function () {
 
-const form = document.getElementById('form');
-const successMsg = document.getElementById('success');
+  const scriptURL = 'https://script.google.com/macros/s/ISI_URL_KAMU/exec';
 
-form.addEventListener('submit', e => {
-  e.preventDefault();
+  const form = document.getElementById('form');
+  const successMsg = document.getElementById('success');
 
-  const formData = new FormData(form);
-  const wa = formData.get("wa");
+  form.addEventListener('submit', e => {
+    e.preventDefault();
 
-  // Validasi WA sederhana
-  if (wa.length < 10) {
-    alert("Nomor WhatsApp tidak valid!");
-    return;
-  }
+    const formData = new FormData(form);
+    const wa = formData.get("wa");
 
-  fetch(scriptURL, {
-    method: 'POST',
-    body: formData
-  })
-  .then(response => {
-    successMsg.style.display = 'block';
+    if (!wa || wa.length < 10) {
+      alert("Nomor WhatsApp tidak valid!");
+      return;
+    }
 
-    // Redirect ke WhatsApp
-    window.location.href =
-      "https://wa.me/6285217171948?text=Halo saya sudah pesan obat di ApotekAI";
-  })
-  .catch(error => {
-    alert("Terjadi kesalahan!");
-    console.error(error);
+    fetch(scriptURL, {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => {
+      successMsg.style.display = 'block';
+
+      setTimeout(() => {
+        window.location.href =
+          "https://wa.me/6285217171948?text=Halo saya sudah pesan obat di ApotekAI";
+      }, 1000);
+    })
+    .catch(error => {
+      alert("Terjadi kesalahan!");
+      console.error(error);
+    });
   });
+
 });
